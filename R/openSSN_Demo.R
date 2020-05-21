@@ -15,6 +15,9 @@
 #Step 1: openSTARS demo---------------------------------------------------------
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #1.1 Setup workspace------------------------------------------------------------
+#Clear Memory
+remove(list=ls())
+
 #Download packages of interest
 library('SSN')
 library("openSTARS")
@@ -98,7 +101,7 @@ execGRASS("r.slope.aspect", flags = c("overwrite","quiet"),
             slope = "slope"
           ))
 
-# calculate average slope per sub-catchment of each stream segment using raster and imported vector data
+# calculate average slope and landuse per sub-catchment of each stream segment using raster and imported vector data
 calc_attributes_edges(input_raster = "slope", stat_rast = "mean",
                       attr_name_rast = "avSlo", input_vector = "landuse", 
                       stat_vect = "percent", attr_name_vect = "landuse", 

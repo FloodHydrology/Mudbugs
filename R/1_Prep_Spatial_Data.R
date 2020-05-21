@@ -111,5 +111,6 @@ predictions <- st_point_on_surface(streams_shp)
 mapview(list(streams_shp, predictions))
 
 #Export points to working dir
-st_write(df_shp, paste0(data_dir, "\\II_Work\\prediction.shp"), append=T)
+st_write(streams_shp, paste0(data_dir, "\\II_Work\\streams.shp"), append=T)
+st_write(predictions, paste0(data_dir, "\\II_Work\\prediction.shp"), append=T)
 

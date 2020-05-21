@@ -28,7 +28,6 @@ remove(list=ls())
 #Start time
 t0<-Sys.time()
 
-
 #Download packages of interest
 library('SSN')
 library("openSTARS")
@@ -86,6 +85,12 @@ calc_sites()
 tf<-Sys.time()
 tf-t0
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Step 4: Write ssn object-------------------------------------------------------
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ssn_dir <- file.path(tempdir(), 'nc.ssn')
+export_ssn(ssn_dir)
+list.files(ssn_dir)
 
 
 

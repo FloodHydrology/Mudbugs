@@ -16,7 +16,7 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #1.1 Setup workspace------------------------------------------------------------
 #Download packages of interest
-library('ssn')
+library('SSN')
 library("openSTARS")
 library('rgrass7')
 library('raster')
@@ -25,6 +25,9 @@ library('raster')
 use_sp()
 
 #Initiate grass session
+#   See comment here: https://gis.stackexchange.com/questions/254813/rgrass7-init-error
+#   BAsically, GRASS + R is a huge PITa. YOu need to restart your PC 
+#   everytime you run RGRASS
 initGRASS("C:/Program Files/GRASS GIS 7.6",
           override = TRUE,
           gisDbase = "GRASS_TEMP",

@@ -58,6 +58,7 @@ import_data(dem = dem_path,
             predictor_vector = preds_path, 
             predictor_v_names = c("landuse", "psources"))
 
+
 #Plot data
 dem <- readRAST("dem", ignore.stderr = TRUE)
 sites <- readVECT("sites_o", ignore.stderr = TRUE)

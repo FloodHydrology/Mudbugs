@@ -8,7 +8,7 @@
 #The goal of this script is to prep the spatial data for SSN modeling. Data include:
 #   #NHDPlusV2 HydroDem (https://www.epa.gov/waterdata/nhdplus-south-atlantic-west-data-vector-processing-unit-03w)
 #   #NHDPlusV2 WBD dataset (same as above)
-#   #NHDPlusV2 NHD flowlines (same as above)
+#   #Reconditioned flowline and prediction points (https://www.fs.fed.us/rm/boise/AWAE/projects/NationalStreamInternet/NSI_network.html)
 #   #Mudbug data from Museum (From Emma!)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -31,8 +31,9 @@ data_dir<-"C:\\Users\\cnjones7\\Box Sync\\My Folders\\Research Projects\\Mudbugs
 df<-read_csv(paste0(data_dir, "\\I_Data\\Cahaba and Locust data.csv"))
 dem<-raster(paste0(data_dir,"\\I_Data\\NHDPlusSA\\NHDPlus03W\\NHDPlusHydrodem03f\\hydrodem"))
 sheds<-st_read(paste0(data_dir,"\\I_Data\\NHDPlusSA\\NHDPlus03W\\WBD\\WBD_Subwatershed.shp"))
-streams_shp<-st_read(paste0(data_dir,"\\I_Data\\NHDPlusSA\\NHDPlus03W\\Hydrography\\NHDFlowline.shp"))
-
+streams<-st_read(paste0(data_dir,"\\I_Data\\NSI\\Flowline_SA03W_NSI.shp"))
+predictions<-st_read(paste0(data_dir,"\\I_Data\\NSI\\PredictionPoints_SA03W_NSI.shp"))
+  
 #Define master project
 p<-"+proj=utm +zone=16 +ellps=GRS80 +units=m +no_defs "
 
@@ -100,17 +101,19 @@ st_write(df_shp, paste0(data_dir, "\\II_Work\\sites.shp"), append=T)
 #Step 4: Create prediction points-----------------------------------------------
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #Reproject streams and then crop to HUC08 of interest
-streams_shp <- streams_shp %>% st_transform(., crs=st_crs(p))
-streams_shp <- st_zm(streams_shp)
-streams_shp <- streams_shp[sheds,]
+streams <- streams %>% st_transform(., crs=st_crs(p))
+streams <- st_zm(streams)
+streams <- streams[sheds,]
 
 #Convert streams to prediction points (i.e., shape centroid)
-predictions <- st_point_on_surface(streams_shp)
+predictions <- predictions %>% st_transform(., crs=st_crs(p))
+predictions <- st_zm(predictions)
+predictions <- predictions[sheds,]
 
 #Check to make sure they overlap
-mapview(list(streams_shp, predictions))
+mapview(list(streams, predictions))
 
 #Export points to working dir
-st_write(streams_shp, paste0(data_dir, "\\II_Work\\streams.shp"), append=T)
+st_write(streams, paste0(data_dir, "\\II_Work\\streams.shp"), append=T)
 st_write(predictions, paste0(data_dir, "\\II_Work\\prediction.shp"), append=T)
 

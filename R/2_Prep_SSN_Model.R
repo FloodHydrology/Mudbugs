@@ -53,9 +53,10 @@ data_dir<-"C:\\Users\\cnjones7\\Box Sync\\My Folders\\Research Projects\\Mudbugs
 #Step 2: Load existing data into grass environment------------------------------
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #Define data paths
-dem_path <- paste0(data_dir, "\\II_Work\\dem.tif")
-sites_path <- paste0(data_dir, "\\II_Work\\sites.shp")
-streams_path<-paste0(data_dir, "\\II_Work\\streams.shp")
+dem_path       <- paste0(data_dir, "\\II_Work\\dem.tif")
+sites_path     <- paste0(data_dir, "\\II_Work\\sites.shp")
+streams_path   <- paste0(data_dir, "\\II_Work\\streams.shp")
+pred_site_path <- paste0(data_dir, "\\II_Work\\prediction.shp")
 # preds_path <- c(system.file("extdata", "nc", "landuse.shp", package = "openSTARS"),
 #                 system.file("extdata", "nc", "pointsources.shp", package = "openSTARS"))
 
@@ -64,16 +65,18 @@ setup_grass_environment(dem = paste0(data_dir, "\\II_Work\\dem.tif"))
 
 #import data
 import_data(dem = dem_path, 
-            sites = sites_path)
-            #streams = streams_path)
+            sites = sites_path,
+            streams = streams_path,
+            pred_sites = pred_site_path)
             # predictor_vector = preds_path, 
             # predictor_v_names = c("landuse", "psources"))
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #Step 3: Create Derived Dataset-------------------------------------------------
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#Derive stream network
-derive_streams()
+# #Derive stream network
+derive_streams(burn = 5, 
+               condition=F)
 
 #Create edge list
 calc_edges()
@@ -88,7 +91,7 @@ tf-t0
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #Step 4: Write ssn object-------------------------------------------------------
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ssn_dir <- file.path(tempdir(), 'nc.ssn')
+ssn_dir <- file.path(paste0(data_dir, "//II_Work"), 'cataba.ssn')
 export_ssn(ssn_dir)
 list.files(ssn_dir)
 

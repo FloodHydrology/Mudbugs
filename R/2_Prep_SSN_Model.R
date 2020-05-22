@@ -78,6 +78,12 @@ import_data(dem = dem_path,
 derive_streams(burn = 5, 
                condition=F)
 
+#Check for complicated junctions
+check_compl_junctions()
+
+#If needed, correct complex junctions
+correct_compl_junctions()
+
 #Create edge list
 calc_edges()
 
@@ -91,8 +97,8 @@ tf-t0
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #Step 4: Write ssn object-------------------------------------------------------
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ssn_dir <- file.path(paste0(data_dir, "//II_Work"), 'cataba.ssn')
-export_ssn(ssn_dir)
+ssn_dir <- file.path(paste0(data_dir,"\\II_Work"), 'cataba.ssn')
+export_ssn(ssn_dir, delete_directory = T)
 list.files(ssn_dir)
 
 

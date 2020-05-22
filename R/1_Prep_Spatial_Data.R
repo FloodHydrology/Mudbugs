@@ -35,7 +35,7 @@ streams<-st_read(paste0(data_dir,"\\I_Data\\NSI\\Flowline_SA03W_NSI.shp"))
 predictions<-st_read(paste0(data_dir,"\\I_Data\\NSI\\PredictionPoints_SA03W_NSI.shp"))
   
 #Define master project
-p<-"+proj=utm +zone=16 +ellps=GRS80 +units=m +no_defs "
+p<-dem@crs
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #Step 2: Clip DEM---------------------------------------------------------------
@@ -75,7 +75,7 @@ df<-df %>% st_drop_geometry() %>%
   #create date collumn
   mutate(date = ymd(paste(Year,"-",Month,"-", Day))) %>% 
   #select cols of interest
-  select(crayfishre, date, Species) %>% 
+  select(crayfishre, date, Year, Month, Day, Species) %>% 
   #remove duplicates and na's
   distinct() %>% drop_na() %>% arrange(date) %>% 
   #pivot wider
@@ -84,18 +84,17 @@ df<-df %>% st_drop_geometry() %>%
               values_from=seen, 
               values_fill=0)
 
-
 #Select species of interest and join to back to spatial data
 df_shp<-df %>% 
   #Select cols of interest
-  select(crayfishre, date, virilis) %>% 
+  select(crayfishre, date, Year, Month, Day, virilis) %>% 
   #join back to shape 
   left_join(df_shp,.) %>% 
   #remove na
   drop_na()
 
 #Export shape
-st_write(df_shp, paste0(data_dir, "\\II_Work\\sites.shp"), append=T)
+st_write(df_shp, paste0(data_dir, "\\II_Work\\sites.shp"), overwrite=T)
   
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #Step 4: Create prediction points-----------------------------------------------
